@@ -11,11 +11,7 @@ export const RenderTile = ({ tile }: Props) => {
   if (tile === undefined) return null
   const theme: string = darkTheme ? 'dark' : 'light'
   const path: string = `/tiles/${theme}/`
-  return (
-    <div>
-      <img className='p-1' src={`${path}${tileToSVGMap[tile]}`} alt={tileToNameMap[tile]} />
-    </div>
-  )
+  return <img className='p-1' src={`${path}${tileToSVGMap[tile]}`} alt={tileToNameMap[tile]} />
 }
 
 const tileToSVGMap: { [id: string]: string } = {
