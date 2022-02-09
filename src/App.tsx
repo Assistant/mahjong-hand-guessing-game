@@ -3,7 +3,7 @@ import {
   ChartBarIcon,
   SunIcon,
 } from '@heroicons/react/outline'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext } from 'react'
 import GraphemeSplitter from 'grapheme-splitter'
 import { Alert } from './components/alerts/Alert'
 import { Grid } from './components/grid/Grid'
@@ -47,6 +47,8 @@ const windMap: { [id: number]: string } = {
   3: '西',
   4: '北',
 }
+
+export const DarkThemeContext = createContext(false)
 
 function App() {
   const prefersDarkMode = window.matchMedia(
@@ -207,17 +209,19 @@ function App() {
           {windMap[wind % 10]} / {isTsumo ? 'Tsumo' : 'Ron'}
         </h2>
       </div>
-      <Grid guesses={guesses} currentGuess={currentGuess} />
-      <Keyboard
-        onChar={onChar}
-        onDelete={onDelete}
-        onEnter={onEnter}
-        guesses={guesses}
-      />
-      <InfoModal
-        isOpen={isInfoModalOpen}
-        handleClose={() => setIsInfoModalOpen(false)}
-      />
+      <DarkThemeContext.Provider value={isDarkMode}>
+        <Grid guesses={guesses} currentGuess={currentGuess} />
+        <Keyboard
+          onChar={onChar}
+          onDelete={onDelete}
+          onEnter={onEnter}
+          guesses={guesses}
+        />
+        <InfoModal
+          isOpen={isInfoModalOpen}
+          handleClose={() => setIsInfoModalOpen(false)}
+        />
+      </DarkThemeContext.Provider>
       <StatsModal
         isOpen={isStatsModalOpen}
         handleClose={() => setIsStatsModalOpen(false)}
@@ -248,10 +252,7 @@ function App() {
         message={WORD_NOT_FOUND_MESSAGE}
         isOpen={isWordNotFoundAlertOpen}
       />
-      <Alert
-        message={INVALID_HAND_MESSAGE}
-        isOpen={isInvalidHandAlertOpen}
-      />
+      <Alert message={INVALID_HAND_MESSAGE} isOpen={isInvalidHandAlertOpen} />
       <Alert message={CORRECT_WORD_MESSAGE(solution)} isOpen={isGameLost} />
       <Alert
         message={successAlert}
